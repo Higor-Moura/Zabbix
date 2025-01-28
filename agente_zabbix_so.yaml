@@ -1,0 +1,76 @@
+---
+- name: Acesso ao servidor
+  hosts: all
+  become: true
+  vars:
+    srv: 'seu ip'
+    hst: "{{ hostvars[inventory_hostname]['ansible_hostname']}}"
+  tasks:
+    # Verificando SO
+    - name: Analisando Sistema Operacional
+      when: ansible_os_family == "OpenBSD"
+      block:
+        - name: Verificando se é OpenBDS
+          ansible.builtin.debug:
+            msg: OpenBSD Verificado
+            # instalar o agente do zabbix
+        - name: Install zabbix agente
+          ansible.builtin.command:
+            cmd: pkg_add -U zabbix-agent
+            creates: /etc/zabbix
+            # Editar o arquivo zabbix_agentd.conf
+        - name: Copy template file zabbix_agentd.conf
+          ansible.builtin.template:
+            src: templates/zabbix_openbsd_agentd.conf.j2
+            dest: /etc/zabbix/zabbix_agentd.conf
+            mode: "664"
+            # ativar o serviço zabbix agent
+        - name: Active service zabbix
+          ansible.builtin.command:
+            cmd: rcctl enable zabbix_agentd
+            creates: /etc/zabbix
+            # Reiniciar o serviço Zabbix Agent.
+        - name: Reiniciar
+          ansible.builtin.command:
+            cmd: rcctl restart zabbix_agentd
+            creates: /etc/zabbix
+            # checar
+        - name: Checar o serviço Zabbix Agent.
+          ansible.builtin.command:
+            cmd: rcctl check zabbix_agentd
+            creates: /etc/zabbix
+            #  xxxxxx
+            #  UBUNTU
+            #  xxxxxx
+            # baixando arquivo oficial do zabbix agente
+    - name: Instalando zabbix no Ubuntu
+      when: ansible_distribution == "Ubuntu"
+      block:
+        - name: Verificando se é Ubuntu
+          ansible.builtin.debug:
+            msg: Ubuntu Verificado
+        - name: Dowload repositorio zabbix.deb
+          ansible.builtin.copy:
+            src: package/zabbix-release_latest_7.0.deb
+            dest: /tmp
+            mode: "664"
+            # instalando repositorio zabbix usando o comando dpkg
+        - name: Install zabbix-agent
+          ansible.builtin.command:
+            cmd: dpkg -i /tmp/zabbix-release_latest_7.0.deb
+            creates: /etc/zabbix
+        - name: Update all package
+          ansible.builtin.apt:
+            update_cache: true
+        - name: Apt install zabbix-agent
+          ansible.builtin.apt:
+            name: zabbix-agent
+            state: present
+            update_cache: true
+            # Editar o arquivo zabbix_agentd.conf
+        - name: Copy template file zabbix_agentd.conf
+          ansible.builtin.template:
+            src: templates/zabbix_agentd.conf.j2
+            dest: /etc/zabbix/zabbix_agentd.conf
+            mode: "664"
+            mode: "664"
