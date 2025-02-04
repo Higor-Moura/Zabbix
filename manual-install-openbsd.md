@@ -37,8 +37,8 @@ vi /etc/zabbix/zabbix_agentd.conf
 
 ```
 	# Alterar o Server, ServerActive, Hostname.
-	Server=192.168.6.88
-	ServerActive=192.168.6.88
+	Server= <seu ip>
+	ServerActive=<seu ip>
 	Hostname=srv-openbsd #(***nome do host local***)
 
 	# Adicionar as linhas abaixo na categoria UserParameter.
@@ -58,7 +58,7 @@ vi /etc/pf.conf
 
 
 	Em # SERVIDORES
-	server_zabbix = "192.168.6.88/32"		# server_gerencia2 = "192.168.7.81/32"
+	server_zabbix = "seu ip"		# server_gerencia2 = "seu ip"
 
 	Em # PORTAS
 	zabbix = 10050
