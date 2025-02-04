@@ -60,7 +60,6 @@ vi /etc/pf.conf
 > server_zabbix = "seu ip"		# server_gerencia2 = "seu ip"
 > Em # PORTAS
 > zabbix = 10050
-{.is-info}
 
 >	# Permite Monitoramento (Zabbix)
 >	pass in quick log on $ext_if proto icmp from $server_zabbix to $ext_ip
