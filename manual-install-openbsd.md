@@ -56,17 +56,16 @@ vi /etc/pf.conf
 
 **3.1. Configurar  o pf.conf**
 
+> Em # SERVIDORES
+> server_zabbix = "seu ip"		# server_gerencia2 = "seu ip"
+> Em # PORTAS
+> zabbix = 10050
+{.is-info}
 
-	Em # SERVIDORES
-	server_zabbix = "seu ip"		# server_gerencia2 = "seu ip"
-
-	Em # PORTAS
-	zabbix = 10050
-
-	# Permite Monitoramento (Zabbix)
-	pass in quick log on $ext_if proto icmp from $server_zabbix to $ext_ip
-	pass in quick log on $ext_if proto tcp from $server_zabbix to $ext_ip port $zabbix
-	pass in quick log on $ext_if proto udp from $server_zabbix to $ext_ip port snmp
+>	# Permite Monitoramento (Zabbix)
+>	pass in quick log on $ext_if proto icmp from $server_zabbix to $ext_ip
+>	pass in quick log on $ext_if proto tcp from $server_zabbix to $ext_ip port $zabbix
+>	pass in quick log on $ext_if proto udp from $server_zabbix to $ext_ip port snmp
 
 
 **3.2. Lê e carrega as regras definidas no pf.conf**
